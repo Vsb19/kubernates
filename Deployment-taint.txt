@@ -8,7 +8,10 @@ metadata:
 spec:  template:   metadata:    name: my-pod # name of the pod    labels: #labels to identify the files
      app: my-app
      tier: front-end
-   spec: #specification for the container    containers:    - name: nginx-image #user defined name for the container      image: nginx # name of the docker image
+   spec: #specification for the container    
+    containers:
+    - name: nginx-image #user defined name for the container
+      image: nginx # name of the docker image
     tolerations: #defining tolleration specifiactions
     - key: "app"
       operator: "Equal"
