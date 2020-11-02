@@ -1,0 +1,10 @@
+apiVersion: v1kind: Service #kind of the defination file
+metadata:
+  name: my-lb #name of the service (user Defined)
+spec:  type: LoadBalancer #defining type of the service  ports:
+  - targetPort: 80 #(port no of the image present inside the Pod defination file(mine httpd))
+    port: 80 #Service Port
+    nodePort: 30008  #port that should be opened at node level
+  selector: # to identify which defination file this load balancer service to be attached with
+   app: my-app
+   tier: front-end
