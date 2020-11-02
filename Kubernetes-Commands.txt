@@ -1,0 +1,48 @@
+1.To run a pod 
+kubectl run [pod name] --image=[name of the image]
+---------------------------------------------------------
+2.To get all the pods list 
+kubectl get pods
+--------------------------------------------------------------
+3.to Descbribe a pod
+kubectl describe pod [name of the pod]
+------------------------------------------------------
+4.To create a pod:
+kubectl apply -f [name oth file]
+--------------------------------------------------------
+5.To craete replicaset:
+kubectl apply -f [file name]
+--------------------------------------------------------
+6.to change the number of replica sets in replicaset
+kubectl scale --replicas==6 -f [file-name]
+--------------------------------------------------------
+7.To delete replica set
+kubectl delete replicaset [file name]
+
+
+8.To create a record of every deployment creation:
+kubectl apply -f [yml filename] --record
+
+9.To describe/ view a deployment file:
+kubectl describe [deploment-name] 
+
+10.To edit deployment(yml file)
+kubectl edit deployment [deployment name]
+
+--------------------------------------------------------
+
+* rollback commands:
+1.to check the status of deployment
+kubectl rollout status deployment.app/name of the deployment[given in yml file]
+
+2.To check the changes made in deployment file
+kubectl rollout history deployment.app/name of the deployment[given in yml file]
+
+3.To undo the changes done to deployment file(roll back)
+kubectl rollout undo deployment.apps/[Deployment name]
+
+*
+1.To Taint a node:
+kubectl taint node node01 app=blue:NoSchedule
+
+
