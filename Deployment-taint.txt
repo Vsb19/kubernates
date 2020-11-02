@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment # kind of defination file
+metadata:
+  name: deployment-taints # user defined name for the deployment defination
+  labels: # labels to identify the defination file from service defination file
+   app: my-app
+   tier: front-end
+spec:  template:   metadata:    name: my-pod # name of the pod    labels: #labels to identify the files
+     app: my-app
+     tier: front-end
+   spec: #specification for the container    containers:    - name: nginx-image #user defined name for the container      image: nginx # name of the docker image
+    tolerations: #defining tolleration specifiactions
+    - key: "app"
+      operator: "Equal"
+      value: "blue"
+      effect: "NoSchedule"
+  replicas: 3 # no-of pods to be created
+  selector:
+    matchLabels:
+     app: my-app
+     tier: front-end
+#To apply taint to a node run:
+kubectl taint node node01(name of the node) app(key)=blue(value):NoSchedule(taint action)
