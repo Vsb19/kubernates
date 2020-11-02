@@ -1,0 +1,23 @@
+apiVersion: apps/v2
+kind: Deployment
+metadata:
+  name: my-deployment # Name of the Deployment File
+  labels:  #Labels to identify the respective Deployment file
+   app: my-app
+   tier: front-end
+spec:
+  template:
+   metadata: # Describing Pod Details
+    name: my-pod
+    labels: # Labels to identify the pod file
+     app: my-app
+     tier: front-end
+   spec: # Spec Section For Container
+    containers:
+    - name: httpd-container #name of the container (user defined)
+      image: httpd (name of the docker image)
+  replicas: 3 # No-of Pods to be created
+  selector:
+   matchLabels:
+    app: my-app
+    tier: front-end
