@@ -45,4 +45,7 @@ kubectl rollout undo deployment.apps/[Deployment name]
 1.To Taint a node:
 kubectl taint node node01 app=blue:NoSchedule
 
+2.To apply a label to the node:
+kubectl label nodes [node-name] [label-key]=[label-value]
+
 
