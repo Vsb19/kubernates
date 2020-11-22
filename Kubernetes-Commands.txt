@@ -49,3 +49,4 @@ kubectl taint node node01 app=blue:NoSchedule
 kubectl label nodes [node-name] [label-key]=[label-value]
 
 
+
