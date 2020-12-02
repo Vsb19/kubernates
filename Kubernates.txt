@@ -1,0 +1,69 @@
+Kubernates Installation Steps:
+
+1.Installing PIP:
+yum install python3.7
+S1-->url from aws site:curl -O https://bootstrap.pypa.io/get-pip.py
+S2--> python get-pip.py --user
+S3-->export PATH=~/.local/bin:$PATH
+S4-->source  ~/.bash_profile
+s5--> check pip is installed or not by: pip --version
+
+2.Installing AWSCLI
+s6-->pip install awscli --upgrade --user
+s7--> aws configure
+*Enter credentials
+
+
+
+3.Installing EKSCTL:
+url from aws site:
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+s8--> sudo mv /tmp/eksctl /usr/local/bin/
+Check EKSCTl is installed or not:  eksctl version
+
+
+
+4.Kubectl:
+url from aws site:curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.9/2020-08-04/bin/linux/amd64/kubectl
+s9--> chmod +x ./kubectl
+s10--> mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
+s11--> kubectl version --short --client
+
+5.Install AWS IAM
+url from aws:curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.17.7/2020-07-08/bin/linux/amd64/aws-iam-authenticator
+s11-->chmod +x ./aws-iam-authenticator
+s12-->  mkdir -p $HOME/bin && cp ./aws-iam-authenticator $HOME/bin/aws-iam-authenticator && export PATH=$PATH:$HOME/bin
+s13-->  echo 'export PATH=$PATH:$HOME/bin' >>~/.bashrc
+To check : aws-iam-authenticator help
+
+Command to create cluster:
+eksctl create cluster --name k8s --version 1.14 --region [region name] --nodegroup-name my-workers --node-type t2.micro --nodes 3 --nodes-min 1 --nodes-max 4 --managed
+
+
+
+* TO create Cluster Auto Sclaer:
+1.kubectl apply -f https://raw.githubusercontent.com/kubernetes/autoscaler/master/cluster-autoscaler/cloudprovider/aws/examples/cluster-autoscaler-autodiscover.yaml
+
+2.kubectl -n kube-system annotate deployment.apps/cluster-autoscaler cluster-autoscaler.kubernetes.io/safe-to-evict="false"
+
+3.kubectl -n kube-system edit deployment.apps/cluster-autoscaler
+
+4.Json file in iam role:
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeAutoScalingInstances",
+                "autoscaling:DescribeLaunchConfigurations",
+                "autoscaling:DescribeTags",
+                "autoscaling:SetDesiredCapacity",
+                "autoscaling:TerminateInstanceInAutoScalingGroup",
+                "ec2:DescribeLaunchTemplateVersions"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        }
+    ]
+}
