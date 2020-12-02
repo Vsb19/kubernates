@@ -64,11 +64,38 @@ Monitering:
 kubectl logs -f event-[pod-name]
 Ex:kubectl logs -f event-my-pod
 -----------------------------------------------------
-K8S Maintainance:
+K8S Maintainance & cluster upgrading:
 1.To Drain a node[Removes all pods from the node & move them(pods) to other nodes in the cluster:
 kubectl drain [node-name] --ignore-daemonsets
 2.To bring the pods back to the node:
 kubectl uncordon [node-name]
+----
+*To update the master node:
+1. To check latest version available to upgrade:
+kubeadm upgrade plan
+2.To upgrade kubeadm:
+download latest version:
+apt-get upgrade -y kubeadm=[version]
+Ex:apt-get upgrade -y kubeadm=1.18.1-00 --fix-missing
 
+Next: kubedm upgrade apply v1.18.1
+
+3.upgrade your kubelet:
+apt-get upgrade -y kubelt=1.12.1-00[generally present in child nodes in real time scenario]
+
+4.Restart kubelet:
+service kubelet restart
+----
+Upgrading child node:
+1.kubectl drain [node name]
+
+2.ssh [node name]
+
+3.apt-mark unhold kubelet kubectl && \
+apt-get update && apt-get install -y kubelet=1.19.x-00 kubectl=1.19.x-00 && \
+apt-mark hold kubelet kubectl
+
+
+-----------------------------------------
 
 
