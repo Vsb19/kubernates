@@ -1,0 +1,66 @@
+1.Quering the Kube Api Server:
+kubectl get all -all-namespaces -o yml > all-deploy-services.yml
+Referrence Link:https://www.youtube.com/watch?v=wEiRS3rgdX4
+
+Cluster upgrade:
+Back up:
+All the Certificates are located in /etc/kubernetes/pki
+All the certificates related to etcd server are placed in:  /etc/kubernetes/pki/etcd
+
+
+S1--> create a directory for storing back ups
+mkdir my-backups
+
+S2-->Backing up the TLS certificates & cluster components:
+*Copy the certificates :cp -r /etc/kubernates/pki my-backups (created directory)
+
+S3-->Creating back up for etcd server:
+*In order to intreact with etcdctl we need to install etcd controll client to be installed
+
+Download the package form:
+go get github.com/coreos/etcd/etcdctl
+
+* check weather etcdctl is installed or not, by clicking etcdctl on u r console.
+
+
+S4-->To save the snapshot of etcdctl server:
+
+  ETCDCTL_API=3 \
+
+> etcdctl snapshot save [Directory-name]/[give some name to file(snapshot.db)] \
+
+> --endpoints=https://[Master node ip]:2379 \  #(2379 is default port no for etcd)
+
+> --cacert=/etc/kubernetes/pki/etcd/ca.crt \ #[Path for CA certificate]
+
+> --cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt \  #[Path for TLS Cerificate]
+
+> --key=/etc/kubernetes/pki/etcd/healthcheck-client.key  #[Path for TLS key ]
+
+To Restore the cluster from the back ups
+S1--> cp -r my-backup[Directory created by us]/pki /etc/kubernates [Copying the back up files to the originl path]
+
+
+S2-->ETCDCTL_API=3 \
+>etcdctl snapshot restore my-backups[directoy created]/snapshot.db
+
+--> The file get restore in a specific path:
+   default.etcd/member/snap
+
+S3-->Move the file:
+mv default.etcd/member /var/lib/etcd
+
+S4-->Chect the file got moved 
+mv default.etcd/member /var/lib/etcd
+
+S5-->Execute Command:
+kubeadm init --ignore-preflight-errors=DirAvailable--var-lib-etcd
+
+
+
+
+
+
+
+
+

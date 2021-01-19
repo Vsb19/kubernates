@@ -1,0 +1,35 @@
+Upgrading master:
+S1-->
+kubeadm upgrade plan[To check vailable updates]
+S2-->
+apt-get upgrade -y kubeadm=1.18.1-00 --fix-missing [To dowload kube adm package]
+
+S3-->kubeadm upgrade apply v1.18.1 [to upgrade kubeadm]
+
+S4-->apt-get upgrade -y kubelet=1.18.1-00 --fix-missing [Up grade kubelet, present in master node]
+
+
+
+S5-->service kubelet restart [restarting kubelet service]
+-----------------------------------------------------------------------------------------------
+
+*Updating Worker nodes:
+*ssh in to the node
+
+S1-->kubectl drain [node-name] --ignore-daemonsets  [Draining the worker node]
+
+S2-->kubeadm upgrade node
+
+S3--> apt-get update && apt-get install -y kubelet=1.19.x-00 kubectl=1.19.x-00
+
+S4-->apt-get update && apt-get install -y --allow-change-held-packages kubelet=1.19.x-00 kubectl=1.19.x-00
+
+S5--> systemctl daemon-reload
+
+S6--> Service kubelet restart
+
+
+
+
+
+S6-->
